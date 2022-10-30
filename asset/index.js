@@ -2,9 +2,11 @@ var filterdatalength, currentdataindex, filteredarray, jsondata;
 let techskills = "";
 let hobbies = "";
 window.onload = init;
-
+jsonServerBaseURL = "http://localhost:3000";
+baseURL = "http://localhost:5500";
 function getJsonData() {
-  return fetch("asset/data.json")
+  console.log("fetching the data...");
+  return fetch(jsonServerBaseURL + "/resume")
     .then((response) => {
       return response.json();
     })
@@ -12,16 +14,18 @@ function getJsonData() {
       var jsondata = new Array();
       jsondata.push(data);
       window.sessionStorage.setItem("resumedata", JSON.stringify(jsondata));
+      fetchall();
     });
 }
 function init() {
   var validUser = JSON.parse(window.localStorage.getItem("isloggedin"));
+  console.log(validUser);
   const { host, hostname, href, origin, pathname, port, protocol, search } =
     window.location;
 
   console.log(pathname);
   if (pathname === "/index.html" && validUser) {
-    location.href = "/resume.html";
+    location.href = baseURL + "/resume.html";
   } else if (pathname === "/index.html" && !validUser) {
     var a = new Array();
     up1 = new Object();
@@ -37,9 +41,11 @@ function init() {
     if (!jsondata) {
       getJsonData();
     }
-    fetchall();
+    else{
+      fetchall();
+    }
   } else {
-    location.href = "/index.html";
+    location.href = baseURL + "/index.html";
   }
 }
 function Login() {
@@ -59,13 +65,11 @@ function Login() {
     if (isvalid) {
       var b = new Array();
       up2 = new Object();
-      up2 = {
-        status: true,
-      };
+      up2 = true;
       b.push(up2);
       // console.log(a)
       window.localStorage.setItem("isloggedin", JSON.stringify(b));
-      location.href = "/resume.html";
+      location.href = baseURL + "/resume.html";
     } else {
       document.getElementById("msg").innerHTML = "invalid username/password.";
     }
@@ -181,8 +185,10 @@ function getPrev() {
   putData();
 }
 function fetchall() {
+  console.log("Putting data...");
   jsondata = JSON.parse(window.sessionStorage.getItem("resumedata"));
-  filteredarray = jsondata[0]["resume"];
+  console.log(jsondata);
+  filteredarray = jsondata[0];
   console.log(filteredarray);
   if (filteredarray.length > 0) {
     filterdatalength = filteredarray.length - 1;
@@ -207,7 +213,7 @@ function getdata(event) {
   var search = document.getElementById("searchbox").value;
   if (search != "") {
     jsondata = JSON.parse(window.sessionStorage.getItem("resumedata"));
-    filteredarray = jsondata[0]["resume"].filter(
+    filteredarray = jsondata[0].filter(
       (jsondata) =>
         jsondata.basics.AppliedFor.toLowerCase() === search.toLowerCase()
     );
