@@ -3,7 +3,7 @@ let techskills = "";
 let hobbies = "";
 window.onload = init;
 jsonServerBaseURL = "http://localhost:3000";
-baseURL = "http://localhost:5500";
+// baseURL = "http://localhost:5500";
 function getJsonData() {
   console.log("fetching the data...");
   return fetch(jsonServerBaseURL + "/resume")
@@ -25,7 +25,7 @@ function init() {
 
   console.log(pathname);
   if (pathname === "/index.html" && validUser) {
-    location.href = baseURL + "/resume.html";
+    location.href = "/resume.html";
   } else if (pathname === "/index.html" && !validUser) {
     var a = new Array();
     up1 = new Object();
@@ -45,7 +45,7 @@ function init() {
       fetchall();
     }
   } else {
-    location.href = baseURL + "/index.html";
+    location.href = "/index.html";
   }
 }
 function Login() {
@@ -69,7 +69,7 @@ function Login() {
       b.push(up2);
       // console.log(a)
       window.localStorage.setItem("isloggedin", JSON.stringify(b));
-      location.href = baseURL + "/resume.html";
+      location.href = "/resume.html";
     } else {
       document.getElementById("msg").innerHTML = "invalid username/password.";
     }
